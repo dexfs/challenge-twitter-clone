@@ -8,7 +8,7 @@ export type PostProps = {
   created_at?: Date;
   is_quote?: boolean;
   is_repost?: boolean;
-  original_post_id?: UniqueEntityId;
+  original_post_id?: string;
   original_post_content?: string;
   original_post_user_id?: number;
   original_post_screen_name?: string;
@@ -17,69 +17,64 @@ export type PostProps = {
 export type OriginalPostProps = Pick<
   PostProps,
   'user_id' | 'content' | 'is_repost' | 'is_quote'
-> & { screen_name: string; id: UniqueEntityId };
+> & { screen_name: string; id: string };
 
 export class Post extends Entity<PostProps> {
-  private _content: string;
-  private _user_id: number;
-  private _created_at?: Date;
-  private _is_quote: boolean;
-  private _is_repost: boolean;
-  private _original_post_id?: UniqueEntityId;
-  private _original_post_content?: string;
-  private _original_post_user_id?: number;
-  private _original_post_screen_name?: string;
-
-  constructor(props: PostProps, id?: UniqueEntityId) {
+  constructor(readonly props: PostProps, id?: UniqueEntityId) {
     super(props, id);
-    this._content = props.content;
-    this._user_id = props.user_id;
-    this._created_at = props.created_at || new Date();
-    this._is_quote = props.is_quote || false;
-    this._is_repost = props.is_repost || false;
+    this.props.content = props.content;
+    this.props.user_id = props.user_id;
+    this.props.created_at = props.created_at || new Date();
+    this.props.is_quote = props.is_quote || false;
+    this.props.is_repost = props.is_repost || false;
+    this.props.original_post_id = props?.original_post_id || null;
+    this.props.original_post_content = props?.original_post_content || null;
+    this.props.original_post_user_id = props?.original_post_user_id || null;
+    this.props.original_post_screen_name =
+      props?.original_post_screen_name || null;
   }
 
   get content(): string {
-    return this._content;
+    return this.props.content;
   }
 
   get user_id(): number {
-    return this._user_id;
+    return this.props.user_id;
   }
 
   get created_at(): Date {
-    return this._created_at;
+    return this.props.created_at;
   }
 
   get is_quote(): boolean {
-    return this._is_quote;
+    return this.props.is_quote;
   }
 
   get is_repost(): boolean {
-    return this._is_repost;
+    return this.props.is_repost;
   }
 
-  get original_post_id(): UniqueEntityId {
-    return this._original_post_id;
+  get original_post_id(): string | null {
+    return this.props.original_post_id;
   }
 
   get original_post_content(): string {
-    return this._original_post_content;
+    return this.props.original_post_content;
   }
 
   get original_post_user_id(): number {
-    return this._original_post_user_id;
+    return this.props.original_post_user_id;
   }
 
   get original_post_screen_name(): string {
-    return this._original_post_screen_name;
+    return this.props.original_post_screen_name;
   }
 
   repost(originalPost: OriginalPostProps) {
     if (originalPost.is_repost) {
       throw new DomainError('It is not possible repost a repost post');
     }
-    this._is_repost = true;
+    this.props.is_repost = true;
     this.addOriginalPostInfo(originalPost);
   }
 
@@ -88,15 +83,15 @@ export class Post extends Entity<PostProps> {
       throw new DomainError('It is not possible a quote post of a quote post');
     }
 
-    this._is_quote = true;
-    this._content = quoteContent;
+    this.props.is_quote = true;
+    this.props.content = quoteContent;
     this.addOriginalPostInfo(originalPost);
   }
 
   private addOriginalPostInfo(originalPost: OriginalPostProps) {
-    this._original_post_id = originalPost.id.value;
-    this._original_post_content = originalPost.content;
-    this._original_post_user_id = originalPost.user_id;
-    this._original_post_screen_name = originalPost.screen_name;
+    this.props.original_post_id = originalPost.id;
+    this.props.original_post_content = originalPost.content;
+    this.props.original_post_user_id = originalPost.user_id;
+    this.props.original_post_screen_name = originalPost.screen_name;
   }
 }
