@@ -3,14 +3,14 @@ import UniqueEntityId from '../../../@shared/domain/value-objects/unique-entity-
 import Entity from '../../../@shared/domain/entities/entity';
 
 export type PostProps = {
-  content: string;
-  user_id: number;
+  content?: string;
+  user_id: string;
   created_at?: Date;
   is_quote?: boolean;
   is_repost?: boolean;
   original_post_id?: string;
   original_post_content?: string;
-  original_post_user_id?: number;
+  original_post_user_id?: string;
   original_post_screen_name?: string;
 };
 
@@ -22,7 +22,7 @@ export type OriginalPostProps = Pick<
 export class Post extends Entity<PostProps> {
   constructor(readonly props: PostProps, id?: UniqueEntityId) {
     super(props, id);
-    this.props.content = props.content;
+    this.props.content = props.content || null;
     this.props.user_id = props.user_id;
     this.props.created_at = props.created_at || new Date();
     this.props.is_quote = props.is_quote || false;
@@ -38,7 +38,7 @@ export class Post extends Entity<PostProps> {
     return this.props.content;
   }
 
-  get user_id(): number {
+  get user_id(): string {
     return this.props.user_id;
   }
 
@@ -62,7 +62,7 @@ export class Post extends Entity<PostProps> {
     return this.props.original_post_content;
   }
 
-  get original_post_user_id(): number {
+  get original_post_user_id(): string {
     return this.props.original_post_user_id;
   }
 
