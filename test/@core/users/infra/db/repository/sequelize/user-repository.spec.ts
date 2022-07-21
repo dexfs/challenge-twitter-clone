@@ -1,27 +1,10 @@
-import { Sequelize } from 'sequelize-typescript';
-
 import { User } from '#core/users/domain/entities/user';
 import { UserModel } from '#core/users/infra/db/repository/sequelize/user-model';
 import UserSequelizeRepository from '#core/users/infra/db/repository/sequelize/user-repository';
+import { setupSequelize } from '../../../../../../helpers/db';
 
 describe('User -> Infra -> Repository -> UserSequelizeRepository', () => {
-  let sequelize: Sequelize;
-  beforeAll(() => {
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      host: ':memory:',
-      logging: false,
-      models: [UserModel],
-    });
-  });
-
-  beforeEach(async () => {
-    await sequelize.sync({ force: true });
-  });
-
-  afterAll(async () => {
-    await sequelize.close();
-  });
+  setupSequelize({ models: [UserModel] });
 
   it('should return null if user not exists', async () => {
     const sut = new UserSequelizeRepository(UserModel);

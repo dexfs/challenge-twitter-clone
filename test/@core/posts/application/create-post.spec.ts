@@ -1,30 +1,17 @@
-import { Sequelize } from 'sequelize-typescript';
 import { PostModel } from '#core/posts/infra/db/repository/sequelize/post-model';
 import { Post } from '#core/posts/domain/entities/post';
 import PostSequelizeRepository from '#core/posts/infra/db/repository/sequelize/post-repository';
 import PostRepository from '#core/posts/domain/repositories/post.repository';
 import CreatePost from '#core/posts/application/create-post';
 import UniqueEntityId from '#core/@shared/domain/value-objects/unique-entity-id.vo';
+import { setupSequelize } from '../../../helpers/db';
 
 describe('Post -> Application -> UseCase', () => {
-  let sequelize: Sequelize;
   let repository: PostRepository.Repository<Post>;
-  beforeAll(() => {
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      host: ':memory:',
-      logging: false,
-      models: [PostModel],
-    });
-  });
+  setupSequelize({ models: [PostModel] });
 
   beforeEach(async () => {
     repository = new PostSequelizeRepository(PostModel);
-    await sequelize.sync({ force: true });
-  });
-
-  afterAll(async () => {
-    await sequelize.close();
   });
 
   it('it should create a post correctly', async () => {

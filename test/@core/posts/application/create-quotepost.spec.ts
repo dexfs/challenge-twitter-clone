@@ -1,4 +1,3 @@
-import { Sequelize } from 'sequelize-typescript';
 import { PostModel } from '#core/posts/infra/db/repository/sequelize/post-model';
 import { Post } from '#core/posts/domain/entities/post';
 import PostSequelizeRepository from '#core/posts/infra/db/repository/sequelize/post-repository';
@@ -9,29 +8,16 @@ import UserSequelizeRepository from '#core/users/infra/db/repository/sequelize/u
 import { UserModel } from '#core/users/infra/db/repository/sequelize/user-model';
 import UniqueEntityId from '#core/@shared/domain/value-objects/unique-entity-id.vo';
 import CreateQuotePost from '#core/posts/application/create-quotepost';
+import { setupSequelize } from '../../../helpers/db';
 
 describe('Post -> Application -> CreateQuotepost UseCase', () => {
-  let sequelize: Sequelize;
   let postRepository: PostRepository.Repository<Post>;
   let userRepository: UserRepository.Repository<User>;
-
-  beforeAll(() => {
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      host: ':memory:',
-      logging: false,
-      models: [PostModel, UserModel],
-    });
-  });
+  setupSequelize({ models: [PostModel, UserModel] });
 
   beforeEach(async () => {
     postRepository = new PostSequelizeRepository(PostModel);
     userRepository = new UserSequelizeRepository(UserModel);
-    await sequelize.sync({ force: true });
-  });
-
-  afterAll(async () => {
-    await sequelize.close();
   });
 
   it('it should throw an exception when nonexistent post_id sent', async () => {
