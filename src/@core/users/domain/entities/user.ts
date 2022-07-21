@@ -1,22 +1,17 @@
+import Entity from '#core/@shared/domain/entities/entity';
+import UniqueEntityId from '#core/@shared/domain/value-objects/unique-entity-id.vo';
+
 type UserProps = {
-  id?: number;
   username: string;
 };
 
-export class User {
-  private _id: number;
-  private _username: string;
-
-  constructor(props: UserProps) {
-    this._id = props?.id || null;
-    this._username = props.username;
-  }
-
-  get id(): number {
-    return this._id;
+export class User extends Entity<UserProps> {
+  constructor(readonly props: UserProps, id?: UniqueEntityId) {
+    super(props, id);
+    this.props.username = props.username;
   }
 
   get username(): string {
-    return this._username;
+    return this.props.username;
   }
 }
