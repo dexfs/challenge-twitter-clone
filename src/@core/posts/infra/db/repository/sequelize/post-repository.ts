@@ -56,8 +56,8 @@ export default class PostSequelizeRepository
     if (!filters.all) {
       where = Object.assign(where, { is_repost: false, is_quote: false });
     }
-    console.log(where);
-    const { count, rows } = await this.postModel.findAndCountAll({
+
+    const { rows } = await this.postModel.findAndCountAll({
       where,
       order,
       limit,
@@ -65,5 +65,15 @@ export default class PostSequelizeRepository
     });
     if (!rows) return null;
     return rows.map((r) => new Post(r.toJSON()));
+  }
+
+  async countPostsByUser(userId: string): Promise<number> {
+    const count = await this.postModel.count({
+      where: {
+        user_id: userId,
+      },
+    });
+
+    return count;
   }
 }

@@ -5,6 +5,8 @@ import Entity from '#core/@shared/domain/entities/entity';
 namespace PostRepository {
   export interface Repository<E extends Entity> extends RepositoryInterface<E> {
     search(query: any): any;
+
+    countPostsByUser(userId: string): Promise<number>;
   }
 }
 
