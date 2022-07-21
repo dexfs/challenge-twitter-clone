@@ -8,8 +8,10 @@ export default class PostSequelizeRepository
 {
   constructor(private postModel: typeof PostModel) {}
 
-  findById(id: string | UniqueEntityId): Promise<Post> {
-    return Promise.resolve(undefined);
+  async findById(id: string): Promise<Post> {
+    const model = await this.postModel.findByPk(id);
+    if (!model) return null;
+    return new Post(model.toJSON());
   }
 
   async insert(entitiy: Post): Promise<void> {
