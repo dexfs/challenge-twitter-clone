@@ -3,7 +3,7 @@ import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 const sequelizeOptions: SequelizeOptions = {
   dialect: 'sqlite',
   host: ':memory:',
-  logging: true,
+  logging: false,
 };
 
 export function setupSequelize(options: SequelizeOptions) {
