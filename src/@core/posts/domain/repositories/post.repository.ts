@@ -3,7 +3,9 @@ import Entity from '#core/@shared/domain/entities/entity';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 namespace PostRepository {
-  export type Repository<E extends Entity> = RepositoryInterface<E>;
+  export interface Repository<E extends Entity> extends RepositoryInterface<E> {
+    search(query: any): any;
+  }
 }
 
 export default PostRepository;
