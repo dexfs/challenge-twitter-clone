@@ -11,7 +11,7 @@ export class PostDataBuilder {
     this.data = {
       id: new UniqueEntityId(this.fakeData.guid({ version: 4 })),
       content: this.fakeData.paragraph({ sentences: 1 }),
-      user_id: this.fakeData.integer(),
+      user_id: this.fakeData.guid({ version: 4 }),
       created_at: this.fakeData.date(),
       is_quote: false,
       is_repost: false,
@@ -41,11 +41,9 @@ export class PostDataBuilder {
   }
 
   private createOriginalPost() {
-    this.data.original_post_id = new UniqueEntityId(
-      this.fakeData.guid({ version: 4 }),
-    );
+    this.data.original_post_id = this.fakeData.guid({ version: 4 });
     this.data.original_post_content = this.fakeData.paragraph({ sentences: 1 });
-    this.data.original_post_user_id = this.fakeData.integer();
+    this.data.original_post_user_id = this.fakeData.guid({ version: 4 });
     this.data.original_post_screen_name = this.fakeData.name();
   }
 }
