@@ -9,6 +9,26 @@ export default class PostSequelizeRepository
 {
   constructor(private postModel: typeof PostModel) {}
 
+  private _mountWhereDateFilter(where, filters) {
+    if (filters.startDate) {
+      where = Object.assign(where, {
+        created_at: { [Op.gte]: new Date(filters.startDate) },
+      });
+    }
+
+    if (filters.endDate) {
+      where = Object.assign(where, {
+        created_at: !filters.startDate
+          ? { [Op.lte]: new Date(filters.endDate) }
+          : {
+              [Op.between]: [new Date(filters.startDate), new Date(filters)],
+            },
+      });
+    }
+
+    return where;
+  }
+
   async findById(id: string): Promise<Post> {
     const model = await this.postModel.findByPk(id);
     if (!model) return null;
@@ -35,24 +55,8 @@ export default class PostSequelizeRepository
     const { limit, offset, order, ...filters } = query;
     let where = {};
 
-    if (filters.startDate) {
-      where = Object.assign(where, {
-        created_at: { [Op.gte]: new Date(query.startDate) },
-      });
-    }
+    where = this._mountWhereDateFilter(where, filters);
 
-    if (filters.endDate) {
-      where = Object.assign(where, {
-        created_at: !filters.startDate
-          ? { [Op.lte]: new Date(query.endDate) }
-          : {
-              [Op.between]: [
-                new Date(query.startDate),
-                new Date(query.endDate),
-              ],
-            },
-      });
-    }
     if (!filters.all) {
       where = Object.assign(where, { is_repost: false, is_quote: false });
     }
