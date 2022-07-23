@@ -44,6 +44,6 @@ export class PostDataBuilder {
     this.data.original_post_id = this.fakeData.guid({ version: 4 });
     this.data.original_post_content = this.fakeData.paragraph({ sentences: 1 });
     this.data.original_post_user_id = this.fakeData.guid({ version: 4 });
-    this.data.original_post_screen_name = this.fakeData.name();
+    this.data.original_post_screen_name = this.fakeData.name().substring(1, 14);
   }
 }

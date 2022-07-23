@@ -66,7 +66,7 @@ describe('Post -> Application -> CreateQuotepost UseCase', () => {
 
     const sut = new CreateQuotePost.UseCase(postRepository, userRepository);
     const postCreated = await sut.execute({
-      quote: '',
+      quote: 'a',
       user_id: user.id,
       post_id: post.id,
     });
