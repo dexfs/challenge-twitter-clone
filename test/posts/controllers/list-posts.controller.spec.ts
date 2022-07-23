@@ -1,4 +1,4 @@
-import { ListController } from '../../../src/posts/list-posts.controller';
+import { ListController } from '../../../src/posts/list.controller';
 
 describe('ListPostsController Unit test', () => {
   let controller: ListController;
