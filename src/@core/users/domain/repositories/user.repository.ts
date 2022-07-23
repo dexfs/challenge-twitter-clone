@@ -2,7 +2,8 @@ import { RepositoryInterface } from '#core/@shared/domain/repositories/repositor
 import Entity from '#core/@shared/domain/entities/entity';
 
 namespace UserRepository {
-  export interface Repository<E extends Entity> extends RepositoryInterface<E> {
+  export interface Repository<E extends Entity = any>
+    extends RepositoryInterface<E> {
     findByUsername(username: string): E | Promise<E> | null;
   }
 }
