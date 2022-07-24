@@ -8,6 +8,17 @@ namespace PostRepository {
     search(query: any): any;
 
     countPostsByUser(userId: string): Promise<number>;
+
+    hasRepostByPostIdAndUserId(
+      postId: string,
+      userId: string,
+    ): Promise<boolean>;
+
+    hasRechedPostLimitDay(params: {
+      userId: string;
+      limit: number;
+      date: Date;
+    }): Promise<boolean>;
   }
 }
 

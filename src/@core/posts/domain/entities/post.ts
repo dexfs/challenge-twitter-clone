@@ -81,17 +81,24 @@ export class Post extends Entity<PostProps> {
   }
 
   repost(originalPost: OriginalPostProps) {
-    if (originalPost.is_repost && originalPost.user_id !== this.user_id) {
+    if (originalPost.is_repost) {
       throw new EntityValidationError({
         is_repost: ['It is not possible repost a repost post'],
       });
     }
+    if (originalPost.user_id === this.user_id) {
+      throw new EntityValidationError({
+        is_repost: ['It is not possible repost a repost post'],
+      });
+    }
+
+    Post.validate(originalPost);
     this.props.is_repost = true;
     this.addOriginalPostInfo(originalPost);
   }
 
   quotePost(quoteContent, originalPost: OriginalPostProps) {
-    if (originalPost.is_quote && originalPost.user_id !== this.user_id) {
+    if (originalPost.is_quote && originalPost.user_id === this.user_id) {
       throw new EntityValidationError({
         is_quote: ['It is not possible a quote post of a quote post'],
       });

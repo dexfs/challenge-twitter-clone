@@ -1,14 +1,24 @@
-import { Body, Controller, Inject, Param, Post } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
-import CreatePost from '#core/posts/application/create-post';
+import {
+  Body,
+  Controller,
+  Inject,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
+import CreateRepost from '#core/posts/application/create-repost';
+import { RepostDto } from './dto/repost.dto';
 
 @Controller('posts')
 export class RepostController {
-  @Inject(CreatePost.UseCase)
-  private readonly createPostUseCase;
+  @Inject(CreateRepost.UseCase)
+  private readonly repostUseCase;
 
   @Post('repost/:postId')
-  create(@Param('postId') postId: string, @Body() repostBody: CreatePostDto) {
-    return this.createPostUseCase.execute(repostBody);
+  create(
+    @Param('postId', new ParseUUIDPipe()) postId: string,
+    @Body() payload: RepostDto,
+  ) {
+    return this.repostUseCase.execute({ ...payload, post_id: postId });
   }
 }

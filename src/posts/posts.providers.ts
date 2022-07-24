@@ -29,10 +29,16 @@ export namespace POST_PROVIDERS {
 
     export const CREATE_POST_USE_CASE = {
       provide: CreatePost.UseCase,
-      useFactory: (postRepository: PostRepository.Repository) => {
-        return new CreatePost.UseCase(postRepository);
+      useFactory: (
+        postRepository: PostRepository.Repository,
+        userRepository: UserRepository.Repository,
+      ) => {
+        return new CreatePost.UseCase(postRepository, userRepository);
       },
-      inject: [REPOSITORIES.POST_SEQUELIZE_REPOSITORY.provide],
+      inject: [
+        REPOSITORIES.POST_SEQUELIZE_REPOSITORY.provide,
+        USER_PROVIDERS.REPOSITORIES.USER_SEQUELIZE.provide,
+      ],
     };
 
     export const CREATE_REPOST_USE_CASE = {

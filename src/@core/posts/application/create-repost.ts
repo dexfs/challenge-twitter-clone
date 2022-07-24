@@ -13,10 +13,19 @@ namespace CreateRepost {
     ) {}
 
     async execute(input: CreateRepost.Input): Promise<CreateRepost.Output> {
-      const post = await this.postRepository.findById(input.post_id);
+      const hasRepost = await this.postRepository.hasRepostByPostIdAndUserId(
+        input.post_id,
+        input.user_id,
+      );
+
+      if (hasRepost) {
+        throw new DomainError('It is not possible repost a repost post');
+      }
+
+      const originalPost = await this.postRepository.findById(input.post_id);
       const user = await this.userRepository.findById(input.user_id);
 
-      if (!post) throw new DomainError('Post not found!');
+      if (!originalPost) throw new DomainError('Post not found!');
       if (!user) throw new DomainError('User not found!');
 
       const repost = new Post({
@@ -24,11 +33,11 @@ namespace CreateRepost {
       });
 
       repost.repost({
-        id: post.id,
-        user_id: post.user_id,
-        content: post.content,
-        is_repost: post.is_repost,
-        is_quote: post.is_quote,
+        id: originalPost.id,
+        user_id: originalPost.user_id,
+        content: originalPost.content,
+        is_repost: originalPost.is_repost,
+        is_quote: originalPost.is_quote,
         screen_name: user.username,
       });
       await this.postRepository.insert(repost);

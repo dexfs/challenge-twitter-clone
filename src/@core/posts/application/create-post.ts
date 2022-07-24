@@ -1,12 +1,32 @@
 import UseCaseInterface from '#core/@shared/application/use-case';
 import PostRepository from '#core/posts/domain/repositories/post.repository';
 import { Post } from '#core/posts/domain/entities/post';
+import UserRepository from '#core/users/domain/repositories/user.repository';
+import { User } from '#core/users';
+import DomainError from '#core/@shared/errors/domain-error';
 
 namespace CreatePost {
   export class UseCase implements UseCaseInterface<Input, Output> {
-    constructor(private postRepository: PostRepository.Repository<Post>) {}
+    constructor(
+      private postRepository: PostRepository.Repository<Post>,
+      private userRepository: UserRepository.Repository<User>,
+    ) {}
 
     async execute(input: Input): Promise<Output> {
+      const hasReachedDayLimit =
+        await this.postRepository.hasRechedPostLimitDay({
+          userId: input.user_id,
+          date: new Date(),
+          limit: 5,
+        });
+
+      if (hasReachedDayLimit) {
+        throw new DomainError('You reached your posts day limit ');
+      }
+      const user = await this.userRepository.findById(input.user_id);
+
+      if (!user) throw new DomainError('User not found!');
+
       const entity = new Post({
         content: input.content,
         user_id: input.user_id,

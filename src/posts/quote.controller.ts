@@ -1,6 +1,13 @@
-import { Body, Controller, Inject, Param, Post } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
+import {
+  Body,
+  Controller,
+  Inject,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import CreateQuotePost from '#core/posts/application/create-quotepost';
+import { QuotePostDto } from './dto/quote-post.dto';
 
 @Controller('posts')
 export class QuoteController {
@@ -8,7 +15,10 @@ export class QuoteController {
   private readonly createQuotePostUseCase;
 
   @Post('quote/:postId')
-  create(@Param('postId') postId: string, @Body() repostBody: CreatePostDto) {
-    return this.createQuotePostUseCase.execute(repostBody);
+  create(
+    @Param('postId', new ParseUUIDPipe()) postId: string,
+    @Body() payload: QuotePostDto,
+  ) {
+    return this.createQuotePostUseCase.execute({ ...payload, post_id: postId });
   }
 }

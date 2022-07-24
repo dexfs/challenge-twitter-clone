@@ -43,7 +43,7 @@ export class PostModel extends Model<PostModelProperties> {
   @Column
   original_post_id: string | null;
 
-  @Column
+  @Column({ type: DataType.TEXT })
   original_post_content: string | null;
 
   @Column

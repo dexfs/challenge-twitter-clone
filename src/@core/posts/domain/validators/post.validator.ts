@@ -2,6 +2,7 @@ import ClassValidatorFields from '#core/@shared/validators/class-validator-field
 import { PostProps } from '#core/posts';
 import {
   IsDate,
+  IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
@@ -12,6 +13,7 @@ export class PostRules {
   @MaxLength(777)
   @IsString()
   @IsOptional()
+  @IsNotEmpty()
   content: string;
 
   @IsUUID(4)
@@ -19,21 +21,24 @@ export class PostRules {
 
   @IsDate()
   @IsOptional()
+  @IsNotEmpty()
   created_at: Date;
 
   @IsUUID(4)
   @IsOptional()
-  @IsOptional()
+  @IsNotEmpty()
   original_post_id: string;
 
   @MaxLength(777)
   @IsString()
   @IsOptional()
+  @IsNotEmpty()
   original_post_content: string;
 
   @MaxLength(14)
   @IsString()
   @IsOptional()
+  @IsNotEmpty()
   original_post_screen_name: string;
 
   constructor(data: PostProps) {

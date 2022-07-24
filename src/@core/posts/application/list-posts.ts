@@ -29,6 +29,7 @@ namespace ListPosts {
     endDate?: string;
     all?: boolean;
     order?: [[string, string]];
+    user_id?: string;
   };
   export type Output = {
     items: {

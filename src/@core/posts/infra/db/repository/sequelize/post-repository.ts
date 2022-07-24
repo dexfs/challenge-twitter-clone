@@ -2,7 +2,8 @@ import PostRepository from '#core/posts/domain/repositories/post.repository';
 import { Post } from '#core/posts/domain/entities/post';
 import UniqueEntityId from '#core/@shared/domain/value-objects/unique-entity-id.vo';
 import { PostModel } from '#core/posts/infra/db/repository/sequelize/post-model';
-import { Op } from 'sequelize';
+import { Op, QueryTypes } from 'sequelize';
+import format from 'date-fns/format';
 
 export default class PostSequelizeRepository
   implements PostRepository.Repository<Post>
@@ -32,7 +33,8 @@ export default class PostSequelizeRepository
   async findById(id: string): Promise<Post> {
     const model = await this.postModel.findByPk(id);
     if (!model) return null;
-    return new Post(model.toJSON());
+    const { id: postId, ...post } = model.toJSON();
+    return new Post(post, new UniqueEntityId(postId));
   }
 
   async insert(entitiy: Post): Promise<void> {
@@ -61,6 +63,10 @@ export default class PostSequelizeRepository
       where = Object.assign(where, { is_repost: false, is_quote: false });
     }
 
+    if (filters.user_id) {
+      where = Object.assign(where, { user_id: filters.user_id });
+    }
+
     const { rows } = await this.postModel.findAndCountAll({
       where,
       order,
@@ -68,7 +74,43 @@ export default class PostSequelizeRepository
       offset,
     });
     if (!rows) return null;
-    return rows.map((r) => new Post(r.toJSON()));
+    return rows.map((r) => {
+      const { id, ...post } = r.toJSON();
+      return new Post(post, new UniqueEntityId(id));
+    });
+  }
+
+  async hasRepostByPostIdAndUserId(
+    postId: string,
+    userId: string,
+  ): Promise<boolean> {
+    const count = await this.postModel.count({
+      where: {
+        original_post_id: postId,
+        user_id: userId,
+        is_repost: true,
+      },
+    });
+
+    return !!count;
+  }
+
+  async hasRechedPostLimitDay(params: {
+    userId: string;
+    limit: number;
+    date: Date;
+  }): Promise<boolean> {
+    const sequelize = this.postModel.sequelize;
+    const binds = {
+      replacements: [format(params.date, 'yyyy-MM-dd'), params.userId],
+      type: QueryTypes.SELECT,
+    };
+    const records: any = await sequelize.query(
+      'SELECT COUNT(*)::integer FROM posts WHERE DATE(posts.created_at) = ? AND user_id = ?',
+      binds,
+    );
+
+    return records[0]?.count >= params.limit;
   }
 
   async countPostsByUser(userId: string): Promise<number> {
