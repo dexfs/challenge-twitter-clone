@@ -1,6 +1,7 @@
 import UseCaseInterface from '#core/@shared/application/use-case';
 import PostRepository from '#core/posts/domain/repositories/post.repository';
 import { Post } from '#core/posts/domain/entities/post';
+import { PostOutput } from '#core/@shared/application/dto/posts/post-output';
 
 namespace ListPosts {
   export class UseCase implements UseCaseInterface<Input, Output> {
@@ -11,8 +12,8 @@ namespace ListPosts {
         ...defaultFiltersValues,
         ...input,
       });
-      if (!posts) return { items: [] };
-      return { items: posts.map((p) => p.toJSON()) };
+      if (!posts) return [];
+      return posts.map((p) => p.toJSON());
     }
   }
 
@@ -31,19 +32,6 @@ namespace ListPosts {
     order?: [[string, string]];
     user_id?: string;
   };
-  export type Output = {
-    items: {
-      id: string;
-      content: string | null;
-      user_id: string;
-      is_quote: boolean;
-      is_repost: boolean;
-      created_at: Date;
-      original_post_id: string | null;
-      original_post_content: string | null;
-      original_post_user_id: string | null;
-      original_post_screen_name?: string | null;
-    }[];
-  };
+  export type Output = PostOutput[];
 }
 export default ListPosts;

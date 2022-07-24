@@ -9,3 +9,9 @@ export class ListPostDto implements ListPosts.Input {
   startDate: string;
   user_id: string;
 }
+
+export class ListPostDtoOutput {
+  static toOutput(data: ListPosts.Output[]): ListPostDtoOutput {
+    return { items: data };
+  }
+}

@@ -11,13 +11,13 @@ import DomainError from '#core/@shared/errors/domain-error';
 import { defaultSearchInput } from '#core/@shared/application/dto/posts/post-input';
 
 namespace GetUserFeed {
-  export class UseCase implements UseCaseInterface<Input, Output[]> {
+  export class UseCase implements UseCaseInterface<Input, Output> {
     constructor(
       private userRepository: UserRepository.Repository<User>,
       private postRepository: PostRepository.Repository<Post>,
     ) {}
 
-    async execute(input: Input): Promise<Output[]> {
+    async execute(input: Input): Promise<Output> {
       const user = await this.userRepository.findByUsername(input.username);
       if (!user) throw new DomainError('User not found');
       const posts = await this.postRepository.search({
@@ -44,7 +44,7 @@ namespace GetUserFeed {
     limit?: number;
   };
 
-  export type Output = PostOutput;
+  export type Output = PostOutput[];
 }
 
 export default GetUserFeed;
