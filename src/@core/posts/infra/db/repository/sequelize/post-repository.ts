@@ -105,7 +105,7 @@ export default class PostSequelizeRepository
       type: QueryTypes.SELECT,
     };
     const records: any = await sequelize.query(
-      'SELECT COUNT(*)::integer FROM posts WHERE DATE(posts.created_at) = ? AND user_id = ?',
+      'SELECT COUNT(*) FROM posts WHERE DATE(posts.created_at) = ? AND user_id = ?',
       binds,
     );
 
