@@ -1,5 +1,5 @@
 import { PostProps } from '#core/posts/domain/entities/post';
-import * as chance from 'chance';
+import chance from 'chance';
 import UniqueEntityId from '#core/@shared/domain/value-objects/unique-entity-id.vo';
 
 export class PostDataBuilder {

@@ -53,18 +53,21 @@ describe('Post -> Application -> CreateRepost UseCase', () => {
   });
 
   it('it should create a post correctly', async () => {
-    const user = new User({ username: 'test' });
+    const originalPostUser = new User({ username: 'test' });
+    const sutUser = new User({ username: 'test2' });
+
     const post = new Post({
       content: 'test_1',
-      user_id: user.id,
+      user_id: originalPostUser.id,
     });
 
-    await UserModel.create(user.toJSON());
+    await UserModel.create(originalPostUser.toJSON());
+    await UserModel.create(sutUser.toJSON());
     await PostModel.create(post.toJSON());
 
     const sut = new CreateRepost.UseCase(postRepository, userRepository);
     const postCreated = await sut.execute({
-      user_id: user.id,
+      user_id: sutUser.id,
       post_id: post.id,
     });
     const model = await PostModel.findByPk(postCreated.id);

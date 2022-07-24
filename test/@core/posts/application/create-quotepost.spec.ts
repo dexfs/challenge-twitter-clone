@@ -56,18 +56,20 @@ describe('Post -> Application -> CreateQuotepost UseCase', () => {
 
   it('it should create a post correctly', async () => {
     const user = new User({ username: 'test' });
+    const sutUser = new User({ username: 'test_2' });
     const post = new Post({
       content: 'test_1',
       user_id: user.id,
     });
 
     await UserModel.create(user.toJSON());
+    await UserModel.create(sutUser.toJSON());
     await PostModel.create(post.toJSON());
 
     const sut = new CreateQuotePost.UseCase(postRepository, userRepository);
     const postCreated = await sut.execute({
       quote: 'a',
-      user_id: user.id,
+      user_id: sutUser.id,
       post_id: post.id,
     });
     const model = await PostModel.findByPk(postCreated.id);

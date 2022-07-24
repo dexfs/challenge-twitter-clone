@@ -18,11 +18,15 @@ describe('Post -> Application -> UseCase', () => {
 
   it('it should create a repost correctly', async () => {
     const userId = new UniqueEntityId();
+    const sutUserId = new UniqueEntityId();
     const originalPostEntity = new Post({
       content: 'Teste',
       user_id: userId.value,
     });
-    const repostEntity = new Post({ content: 'Teste2', user_id: userId.value });
+    const repostEntity = new Post({
+      content: 'Teste2',
+      user_id: sutUserId.value,
+    });
     repostEntity.repost({
       user_id: originalPostEntity.user_id,
       content: originalPostEntity.content,
@@ -40,11 +44,15 @@ describe('Post -> Application -> UseCase', () => {
 
   it('it should create a quote post correctly', async () => {
     const userId = new UniqueEntityId();
+    const sutUserId = new UniqueEntityId();
     const originalPostEntity = new Post({
       content: 'Teste',
       user_id: userId.value,
     });
-    const repostEntity = new Post({ content: 'Teste2', user_id: userId.value });
+    const repostEntity = new Post({
+      content: 'Teste2',
+      user_id: sutUserId.value,
+    });
     repostEntity.quotePost('quote test', {
       user_id: originalPostEntity.user_id,
       content: originalPostEntity.content,
