@@ -30,7 +30,11 @@ describe('Post -> Application -> UseCase', () => {
     await UserModel.create(entity.toJSON());
     const sut = new GetUserInfoUseCase.UseCase(repository, postRepository);
     const expectedOutput = await sut.execute({ username: entity.username });
-    expect(expectedOutput).toStrictEqual({ ...entity.toJSON(), totalPosts: 0 });
+    expect(expectedOutput).toStrictEqual({
+      username: entity.username,
+      joinedAt: expect.any(String),
+      totalPosts: 0,
+    });
   });
 
   it('it should return the amount posts of a user passed', async () => {
@@ -41,6 +45,10 @@ describe('Post -> Application -> UseCase', () => {
     );
     const sut = new GetUserInfoUseCase.UseCase(repository, postRepository);
     const expectedOutput = await sut.execute({ username: entity.username });
-    expect(expectedOutput).toStrictEqual({ ...entity.toJSON(), totalPosts: 1 });
+    expect(expectedOutput).toStrictEqual({
+      username: entity.username,
+      joinedAt: expect.any(String),
+      totalPosts: 1,
+    });
   });
 });
