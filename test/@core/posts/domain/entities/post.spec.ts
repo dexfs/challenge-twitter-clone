@@ -1,5 +1,5 @@
 import { Post } from '#core/posts/domain/entities/post';
-import * as chance from 'chance';
+import chance from 'chance';
 import 'jest-extended';
 import { PostDataBuilder } from '../../../../fixtures/builders/post-data-builder';
 import { EntityValidationError } from '#core/@shared/errors/validation-error';

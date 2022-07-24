@@ -98,7 +98,13 @@ export class Post extends Entity<PostProps> {
   }
 
   quotePost(quoteContent, originalPost: OriginalPostProps) {
-    if (originalPost.is_quote && originalPost.user_id === this.user_id) {
+    if (originalPost.is_quote) {
+      throw new EntityValidationError({
+        is_quote: ['It is not possible a quote post of a quote post'],
+      });
+    }
+
+    if (originalPost.user_id === this.user_id) {
       throw new EntityValidationError({
         is_quote: ['It is not possible a quote post of a quote post'],
       });
