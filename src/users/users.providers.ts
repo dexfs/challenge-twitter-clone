@@ -3,6 +3,7 @@ import { UserModel } from '#core/users';
 import GetUserInfoUseCase from '#core/users/application/get-user-info';
 import UserRepository from '#core/users/domain/repositories/user.repository';
 import PostRepository from '#core/posts/domain/repositories/post.repository';
+import GetUserFeed from '#core/users/application/get-user-feed';
 
 export namespace USER_PROVIDERS {
   export namespace REPOSITORIES {
@@ -22,6 +23,18 @@ export namespace USER_PROVIDERS {
       ) => {
         console.log({ userRepository, postRepository });
         return new GetUserInfoUseCase.UseCase(userRepository, postRepository);
+      },
+      inject: ['UserSequelizeRepository', 'PostSequelizeRepository'],
+    };
+
+    export const GET_USER_FEED_USER_CASE = {
+      provide: GetUserFeed.UseCase,
+      useFactory: (
+        userRepository: UserRepository.Repository,
+        postRepository: PostRepository.Repository,
+      ) => {
+        console.log({ userRepository, postRepository });
+        return new GetUserFeed.UseCase(userRepository, postRepository);
       },
       inject: ['UserSequelizeRepository', 'PostSequelizeRepository'],
     };
