@@ -37,7 +37,7 @@ export namespace POST_PROVIDERS {
       },
       inject: [
         REPOSITORIES.POST_SEQUELIZE_REPOSITORY.provide,
-        USER_PROVIDERS.REPOSITORIES.USER_SEQUELIZE.provide,
+        USER_PROVIDERS.REPOSITORIES.USER_SEQUELIZE_REPOSITORY.provide,
       ],
     };
 
@@ -51,7 +51,7 @@ export namespace POST_PROVIDERS {
       },
       inject: [
         REPOSITORIES.POST_SEQUELIZE_REPOSITORY.provide,
-        USER_PROVIDERS.REPOSITORIES.USER_SEQUELIZE.provide,
+        USER_PROVIDERS.REPOSITORIES.USER_SEQUELIZE_REPOSITORY.provide,
       ],
     };
 
@@ -65,7 +65,7 @@ export namespace POST_PROVIDERS {
       },
       inject: [
         REPOSITORIES.POST_SEQUELIZE_REPOSITORY.provide,
-        USER_PROVIDERS.REPOSITORIES.USER_SEQUELIZE.provide,
+        USER_PROVIDERS.REPOSITORIES.USER_SEQUELIZE_REPOSITORY.provide,
       ],
     };
   }

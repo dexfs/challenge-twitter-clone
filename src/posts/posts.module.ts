@@ -19,5 +19,9 @@ import { QuoteController } from './quote.controller';
     ...Object.values(USER_PROVIDERS.REPOSITORIES),
     ...Object.values(POST_PROVIDERS.USE_CASES),
   ],
+  exports: [
+    ...Object.values(POST_PROVIDERS.REPOSITORIES),
+    ...Object.values(POST_PROVIDERS.USE_CASES),
+  ],
 })
 export class PostsModule {}
