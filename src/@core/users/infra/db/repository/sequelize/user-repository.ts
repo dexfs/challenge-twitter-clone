@@ -38,6 +38,7 @@ export default class UserSequelizeRepository
     return new User(
       {
         username: model?.username,
+        created_at: new Date(model?.created_at),
       },
       new UniqueEntityId(model.id),
     );

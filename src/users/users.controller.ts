@@ -1,16 +1,13 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Inject, Param } from '@nestjs/common';
+import GetUserInfo from '#core/users/application/get-user-info';
 
 @Controller('users')
 export class UsersController {
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return { id };
-  }
+  @Inject(GetUserInfo.UseCase)
+  private getUserInfoUseCase;
 
-  @Get()
-  get() {
-    return {
-      message: 'Teste',
-    };
+  @Get(':username')
+  get(@Param('username') username: string) {
+    return this.getUserInfoUseCase.execute({ username });
   }
 }

@@ -3,6 +3,10 @@ import UserRepository from '#core/users/domain/repositories/user.repository';
 import { User } from '#core/users/domain/entities/user';
 import PostRepository from '#core/posts/domain/repositories/post.repository';
 import { Post } from '#core/posts/domain/entities/post';
+import {
+  InfoUserDtoOutput,
+  InfoUserOutputMapper,
+} from '../../../users/dto/info-user.dto';
 
 namespace GetUserInfoUseCase {
   export class UseCase implements UseCaseInterface<Input, Output> {
@@ -17,10 +21,7 @@ namespace GetUserInfoUseCase {
       const userCountPosts = await this.postRepository.countPostsByUser(
         user.id,
       );
-      return {
-        ...user.toJSON(),
-        totalPosts: userCountPosts,
-      };
+      return InfoUserOutputMapper.toOutput(user, userCountPosts);
     }
   }
 
@@ -28,11 +29,7 @@ namespace GetUserInfoUseCase {
     username: string;
   };
 
-  export type Output = {
-    id: string;
-    username: string;
-    totalPosts: number;
-  };
+  export type Output = InfoUserDtoOutput;
 }
 
 export default GetUserInfoUseCase;
