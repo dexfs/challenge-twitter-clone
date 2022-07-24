@@ -4,9 +4,10 @@ import UniqueEntityId from '#core/@shared/domain/value-objects/unique-entity-id.
 import { PostModel } from '#core/posts/infra/db/repository/sequelize/post-model';
 import { Op, QueryTypes } from 'sequelize';
 import format from 'date-fns/format';
+import { Paginate } from '#core/@shared/infra/db/paginate';
 
 export default class PostSequelizeRepository
-  implements PostRepository.Repository<Post>
+  implements PostRepository.Repository<Post>, Paginate
 {
   constructor(private postModel: typeof PostModel) {}
 
@@ -53,8 +54,8 @@ export default class PostSequelizeRepository
     return Promise.resolve(undefined);
   }
 
-  async search(query: any = {}): Promise<Post[]> {
-    const { limit, offset, order, ...filters } = query;
+  async search(query: any = {}): Promise<{ posts: Post[]; count: number }> {
+    const { page, size, order, ...filters } = query;
     let where = {};
 
     where = this._mountWhereDateFilter(where, filters);
@@ -67,17 +68,15 @@ export default class PostSequelizeRepository
       where = Object.assign(where, { user_id: filters.user_id });
     }
 
-    const { rows } = await this.postModel.findAndCountAll({
-      where,
-      order,
-      limit,
-      offset,
-    });
-    if (!rows) return null;
-    return rows.map((r) => {
+    const queryResult = await this.postModel.findAndCountAll(
+      this.paginate({ where, order }, page, size),
+    );
+    if (!queryResult.rows) return null;
+    const posts = queryResult.rows.map((r) => {
       const { id, ...post } = r.toJSON();
       return new Post(post, new UniqueEntityId(id));
     });
+    return { posts, count: queryResult.count };
   }
 
   async hasRepostByPostIdAndUserId(
@@ -121,5 +120,12 @@ export default class PostSequelizeRepository
     });
 
     return count;
+  }
+
+  paginate(query: any, page: number, pageSize: number) {
+    const offset = (+page - 1) * pageSize;
+    const limit = pageSize;
+
+    return { ...query, offset, limit };
   }
 }
