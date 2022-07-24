@@ -14,16 +14,17 @@ namespace ListPosts {
     constructor(private postRepository: PostRepository.Repository<Post>) {}
 
     async execute(input?: Input): Promise<PaginationOutput<Post>> {
-      const { posts, count } = await this.postRepository.search({
+      const filters = {
         ...defaultFiltersValues,
         ...input,
-      });
+      };
+      const { posts, count } = await this.postRepository.search(filters);
 
       const items = posts ? posts.map((p) => p.toJSON()) : [];
       return PaginationOutputMapper.toOuput<Post>(items, {
         count,
-        pageSize: input.size,
-        page: input.page,
+        pageSize: filters.size,
+        page: filters.page,
       });
     }
   }

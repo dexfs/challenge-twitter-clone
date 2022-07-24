@@ -22,7 +22,7 @@ const makeBulkPost = (amount = 10) => {
       }).toJSON(),
     );
   }
-  return { user, posts };
+  return { user, posts, chance };
 };
 
 describe('Post -> ListPost use case', () => {
@@ -112,11 +112,11 @@ describe('Post -> ListPost use case', () => {
   });
 
   it('should list correctly when filter[all] is false and endDate sent', async () => {
-    const { user, posts } = makeBulkPost(20);
+    const { chance, posts } = makeBulkPost(20);
     await PostModel.bulkCreate(posts);
     const newPost = new Post({
       content: 'post de 24/07/2022',
-      user_id: user.id,
+      user_id: chance.guid({ version: 4 }),
       created_at: new Date('2022-07-24'),
     });
 
