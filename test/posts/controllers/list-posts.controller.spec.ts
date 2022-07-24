@@ -13,7 +13,7 @@ describe('ListPostsController Unit test', () => {
     };
 
     controller['listPostUseCase'] = mockListPostUseCase;
-    await controller.get({});
+    await controller.get({} as any);
     expect(controller).toBeDefined();
     expect(mockListPostUseCase.execute).toBeCalledTimes(1);
   });
