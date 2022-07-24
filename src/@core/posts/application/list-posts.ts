@@ -6,6 +6,7 @@ import {
   PaginationOutput,
   PaginationOutputMapper,
 } from '#core/@shared/application/dto/pagination-output';
+import DomainError from '#core/@shared/errors/domain-error';
 
 namespace ListPosts {
   export class UseCase
@@ -18,6 +19,11 @@ namespace ListPosts {
         ...defaultFiltersValues,
         ...input,
       };
+
+      if (filters.all === false && !filters.user_id) {
+        throw new DomainError("Only user's posts needs the user id");
+      }
+
       const { posts, count } = await this.postRepository.search(filters);
 
       const items = posts ? posts.map((p) => p.toJSON()) : [];

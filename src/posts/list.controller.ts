@@ -1,4 +1,11 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common';
+import {
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Inject,
+  ParseBoolPipe,
+  Query,
+} from '@nestjs/common';
 
 import ListPosts from '#core/posts/application/list-posts';
 import { ListPostDto } from './dto/list-post.dto';
@@ -9,7 +16,10 @@ export class ListController {
   private listPostUseCase;
 
   @Get()
-  get(@Query() listParams: ListPostDto) {
-    return this.listPostUseCase.execute(listParams);
+  get(
+    @Query() listParams: ListPostDto,
+    @Query('all', new DefaultValuePipe(true), ParseBoolPipe) all: boolean,
+  ) {
+    return this.listPostUseCase.execute({ ...listParams, all });
   }
 }
