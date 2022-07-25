@@ -112,7 +112,7 @@ describe('Post -> ListPost use case', () => {
   });
 
   it('should list correctly when filter[all] is false and endDate sent', async () => {
-    const { chance, posts } = makeBulkPost(20);
+    const { chance, posts, user } = makeBulkPost(20);
     await PostModel.bulkCreate(posts);
     const newPost = new Post({
       content: 'post de 24/07/2022',
@@ -124,7 +124,7 @@ describe('Post -> ListPost use case', () => {
     await PostModel.create(newPost.toJSON());
 
     const sut = new ListPosts.UseCase(postRepository);
-    const result = await sut.execute({ all: false });
+    const result = await sut.execute({ all: false, user_id: user.id });
 
     expect(result).toHaveProperty('items');
     expect(result.items).toHaveLength(10);

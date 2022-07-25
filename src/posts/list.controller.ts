@@ -18,7 +18,7 @@ export class ListController {
   @Get()
   get(
     @Query() listParams: ListPostDto,
-    @Query('all', new DefaultValuePipe(true), ParseBoolPipe) all: boolean,
+    @Query('all', new DefaultValuePipe(true), ParseBoolPipe) all?: boolean,
   ) {
     return this.listPostUseCase.execute({ ...listParams, all });
   }
