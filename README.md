@@ -1,35 +1,58 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Posterr - Strider - Challenge
 
-## Installation
+## Versions
+
+- Node.js 18.4
+- npm 8
+- PostgreSQL 14.4
+
+## Installation without Docker and docker compose
+
+> Database should be installed and running.
+> the database name should be posterr
 
 ```bash
 $ npm install
+```
+
+## users info
+
+```javascript
+// users data
+const users = [
+    {
+        id: '4cfe67a9-defc-42b9-8410-cb5086bec2f5',
+        username: 'alucard',
+        created_at: new Date(),
+    },
+    {
+        id: 'b8903f77-5d16-4176-890f-f597594ff952',
+        username: 'anderson',
+        created_at: new Date(),
+    },
+    {
+        id: '75135a97-46be-405f-8948-0821290ca83e',
+        username: 'seras_victoria',
+        created_at: new Date(),
+    },
+];
+```
+
+## Running migration and seeders
+
+```bash
+# if will run in a not containerized environment 
+# change the .env file in root directory to the value above.
+DATABASE_DSN=postgres://postgres:123456@localhost:5432/posterr
+
+# running migrations
+npm run db:migrate
+
+# running seeds to insert users
+npm run db:seed:all
+
 ```
 
 ## Running the app
@@ -42,6 +65,7 @@ $ npm run start
 $ npm run start:dev
 
 # production mode
+$ npm run build
 $ npm run start:prod
 ```
 
@@ -51,23 +75,45 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
+# core tests
+$ npm run test:@core
 
 # test coverage
 $ npm run test:cov
 ```
 
-## Support
+## With docker and docker compose
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Versions
 
-## Stay in touch
+- docker compose version v2.4.1
+- Docker version 20.10.16
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+$ docker compose up db -d
+# development  
+$ docker compose up app
 
-## License
+# production
+$ docker compose -f docker-compose.yml -f docker-compose.prod.yml up app
+```
 
-Nest is [MIT licensed](LICENSE).
+## Critique
+
+- If I had more time, I'll improve the tests, adding more integration and e2e tests
+
+### About scaling
+
+**if this project were to grow and have many users and posts, which parts do you think would fail first?**
+Depends on what the system has: many users writing posts or many users reading posts and loading a lot of them.
+if the system grow with many writers, the database can be fail first the writing process, because the indexes, this
+problem can affect the read data from database,
+the request for more posts can became slow.
+
+**In a real-life situation, what steps would you take to scale this product? What other types of technology and
+infrastructure might you need to use?**
+
+- containerize the application to be facilitate the scale.
+- Use an API gateway and load balance.
+- Think in cache strategies
+- Maybe split the read and write databases, working with an eventual persistence
