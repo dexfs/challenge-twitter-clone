@@ -27,7 +27,9 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await queryInterface.bulkInsert('users', users, {});
+    await queryInterface.bulkInsert('users', users, {
+      ignoreDuplicates: true,
+    });
   },
 
   async down(queryInterface, Sequelize) {

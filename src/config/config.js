@@ -1,16 +1,13 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
+console.log('dsn', process.env.DATABASE_DSN);
 module.exports = {
   development: {
-    username: 'postgres',
-    password: '123456',
-    database: 'posterr_development',
-    host: '127.0.0.1',
-    dialect: 'postgres',
+    url: process.env.DATABASE_DSN,
+    dialect: process.env.DATABASE_DSN.split(':')[0],
   },
   production: {
-    username: 'postgres',
-    password: '123456',
-    database: 'posterr',
-    host: '127.0.0.1',
-    dialect: 'postgres',
+    url: process.env.DATABASE_DSN,
+    dialect: process.env.DATABASE_DSN.split(':')[0],
   },
 };
