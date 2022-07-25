@@ -1,8 +1,10 @@
+# files
+.env
+
 # compiled output
 /__coverage
 /dist
 /node_modules
-
 # Logs
 logs
 *.log
