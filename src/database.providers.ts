@@ -1,21 +1,18 @@
 import { Sequelize } from 'sequelize-typescript';
 import { PostModel } from '#core/posts';
 import { UserModel } from '#core/users';
+import { ConfigService } from '@nestjs/config';
 
 export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
-    useFactory: async () => {
-      const sequelize = new Sequelize({
-        dialect: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: 'postgres',
-        password: '123456',
-        database: 'posterr',
+    inject: [ConfigService],
+    useFactory: async (configService: ConfigService) => {
+      const sequelize = new Sequelize(configService.get('pg.dsn'), {
+        dialect: configService.get('pg.dialect'),
       });
       sequelize.addModels([PostModel, UserModel]);
-      await sequelize.sync();
+      // await sequelize.sync();
       return sequelize;
     },
   },
