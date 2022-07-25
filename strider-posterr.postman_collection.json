@@ -1,0 +1,231 @@
+{
+	"info": {
+		"_postman_id": "1fcd9960-07c1-4b70-9e70-3bf12c670d0c",
+		"name": "strider-posterr",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Listar Usuários",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/users/:username/feed",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"users",
+						":username",
+						"feed"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "anderson"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Feed Usuário",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/users/:username/feed",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"users",
+						":username",
+						"feed"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "anderson"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Info Usuário",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/users/:username/info",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"users",
+						":username",
+						"info"
+					],
+					"variable": [
+						{
+							"key": "username",
+							"value": "anderson"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/posts?size=10&all=false&user_id=4cfe67a9-defc-42b9-8410-cb5086bec2f5",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"posts"
+					],
+					"query": [
+						{
+							"key": "endDate",
+							"value": "2022-07-23",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "10"
+						},
+						{
+							"key": "all",
+							"value": "false"
+						},
+						{
+							"key": "user_id",
+							"value": "4cfe67a9-defc-42b9-8410-cb5086bec2f5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\": \"{{$randomLoremSentences}}{{$randomLoremSentences}}{{$randomLoremSentences}}{\",\n    \"user_id\": \"4cfe67a9-defc-42b9-8410-cb5086bec2f5\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/posts/create",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"posts",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Repost",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": \"b8903f77-5d16-4176-890f-f597594ff952\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/posts/repost/:postId",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"posts",
+						"repost",
+						":postId"
+					],
+					"variable": [
+						{
+							"key": "postId",
+							"value": "7cc85bd2-0f28-4fc3-b0fa-7224c23433c3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Quote Post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "quote",
+							"value": "Quote quote quote",
+							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "b8903f77-5d16-4176-890f-f597594ff952",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/posts/quote/:postId",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"posts",
+						"quote",
+						":postId"
+					],
+					"variable": [
+						{
+							"key": "postId",
+							"value": "4b6ed69b-42f0-485b-9786-c492822b4556"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
