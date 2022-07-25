@@ -21,7 +21,6 @@ export namespace USER_PROVIDERS {
         userRepository: UserRepository.Repository,
         postRepository: PostRepository.Repository,
       ) => {
-        console.log({ userRepository, postRepository });
         return new GetUserInfoUseCase.UseCase(userRepository, postRepository);
       },
       inject: ['UserSequelizeRepository', 'PostSequelizeRepository'],
@@ -33,7 +32,6 @@ export namespace USER_PROVIDERS {
         userRepository: UserRepository.Repository,
         postRepository: PostRepository.Repository,
       ) => {
-        console.log({ userRepository, postRepository });
         return new GetUserFeed.UseCase(userRepository, postRepository);
       },
       inject: ['UserSequelizeRepository', 'PostSequelizeRepository'],
