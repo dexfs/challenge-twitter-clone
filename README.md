@@ -2,6 +2,12 @@
 
 Posterr - Strider - Challenge
 
+## Documentation
+
+- Import strider-posterr.postman_collection.json to postman.
+
+In this file there are the resources was created and examples sucess and fail.
+
 ## Versions
 
 - Node.js 18.4
